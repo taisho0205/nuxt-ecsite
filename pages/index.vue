@@ -10,7 +10,7 @@
               <img :src="item.image" alt="">
             </div>
             <div>{{item.title}}</div>
-            <div>{{item.price | formatCurrency}}</div>
+            <div>¥{{item.price | formatCurrency}}</div>
             <input v-model="item.qty" type="number" min="1" />
             <button @click="addToCart(item)" class="button button-outline">カートに入れる</button>
           </div>
@@ -25,10 +25,11 @@
             </tr>
             <tr v-for="(item, index) in cartItems" :key='item.id'>
               <td>{{item.title}}</td>
+              <td>¥{{item.price}}</td>
               <td>{{item.qty}}点</td>
-              <td>
-                <a href="#" @click.stop.prevent="remove(index)"><i class="fas fa-times-circle"></i>削除</a>
-              </td>
+                <td>
+                <button @click='remove(index)'><i class="fas fa-times-circle"></i>削除</button>
+                </td>
             </tr>
             <tr>
               <td colspan="2">合計</td>
@@ -42,11 +43,6 @@
 </template>
 
 <script>
-      // カンマ区切り
-      // Vue.filter('formatCurrency', function (value) {
-        // return '¥' + String(value).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-      // });
-      
   export default{
     data() {
       return {
@@ -63,19 +59,22 @@
     },
     computed: {
       totals: function() {
-        // let total = 0;
-        // this.cartItems.forEach(item => {
-        //   total += (item.price * item.qty);
-        // });
+        let total = this.cartItems;
+        this.cartItems.forEach(item => {
+           total += (item.price * item.qty);
+        });
         return this.total;
       }
     },
 
     methods: {
-      // カートに追加
-      addToCart(itemToAdd) {
-        let existence = false;
-
+      // カートに追加(引数には何を入れるかを質問する)
+      addToCart(item) {
+      this.cartItems.push({
+          title:this.item.title,
+          price: this.item.price,
+          qty:this.item.qty,
+          }),
         this.cartItems.forEach(item => {
           // すでにカートに追加済みの場合は価格を加算
           if (item.id === itemToAdd.id) {
@@ -85,15 +84,15 @@
         });
 
         // 新規商品の場合は商品を追加
-        if (existence === false) {
-          // this.cartItems.push(Vue.util.extend({}, itemToAdd));
+        if (!existence) {
+          this.cartItems.push(Vue.util.extend({}, itemToAdd));
         }
 
         itemToAdd.qty = 1;
       },
       // カートから削除
       remove(index) {
-        this.cartItems.splice(index, 1)
+        this.cartItems = this.cartItems.filter(item => item.id)
       }
 
     }
@@ -154,14 +153,3 @@
 
 </style>
 
-<script>
-import Logo from '~/components/Logo.vue'
-import VuetifyLogo from '~/components/VuetifyLogo.vue'
-
-export default {
-  components: {
-    Logo,
-    VuetifyLogo
-  }
-}
-</script>
