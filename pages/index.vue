@@ -9,8 +9,8 @@
             <div>
               <img :src="item.image" alt="">
             </div>
-            <div>{{item.title}}</div>
-            <div>¥{{item.price | formatCurrency}}</div>
+            <div>{{ item.title }}</div>
+            <div>¥{{ item.price }}</div>
             <input v-model="item.qty" type="number" min="1" />
             <button @click="addToCart(item)" class="button button-outline">カートに入れる</button>
           </div>
@@ -24,9 +24,9 @@
               <th class="" colspan="4"><i class="fas fa-shopping-cart"></i>ショッピングカート</th>
             </tr>
             <tr v-for="(item, index) in cartItems" :key='item.id'>
-              <td>{{item.title}}</td>
-              <td>¥{{item.price}}</td>
-              <td>{{item.qty}}点</td>
+              <td>{{ item.title }}</td>
+              <td>¥{{ item.price }}</td>
+              <td>{{ item.qty }}点</td>
                 <td>
                 <button @click='remove(index)'><i class="fas fa-times-circle"></i>削除</button>
                 </td>
@@ -71,24 +71,24 @@
       // カートに追加(引数には何を入れるかを質問する)
       addToCart(item) {
       this.cartItems.push({
-          title:this.item.title,
-          price: this.item.price,
-          qty:this.item.qty,
-          }),
-        this.cartItems.forEach(item => {
-          // すでにカートに追加済みの場合は価格を加算
-          if (item.id === itemToAdd.id) {
-            existence = true;
-            item.qty += Number(itemToAdd.qty);
-          }
-        });
+          title: item.title,
+          price: item.price,
+          qty: item.qty,
+          });
+      //   this.cartItems.forEach(item => {
+      //     // すでにカートに追加済みの場合は価格を加算
+      //     if (item.id === itemToAdd.id) {
+      //       existence = true;
+      //       item.qty += Number(itemToAdd.qty);
+      //     }
+      //   });
 
-        // 新規商品の場合は商品を追加
-        if (!existence) {
-          this.cartItems.push(Vue.util.extend({}, itemToAdd));
-        }
+      //   // 新規商品の場合は商品を追加
+      //   if (!existence) {
+      //     this.cartItems.push(Vue.util.extend({}, itemToAdd));
+      //   }
 
-        itemToAdd.qty = 1;
+      //   itemToAdd.qty = 1;
       },
       // カートから削除
       remove(index) {
