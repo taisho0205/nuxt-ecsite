@@ -33,7 +33,7 @@
             </tr>
             <tr>
               <td colspan="2">合計</td>
-              <td colspan="2">{{ totals }}</td>
+              <td colspan="2">{{ sum }}</td>
             </tr>
           </table>
         </div>
@@ -58,41 +58,24 @@
       } 
     },
     computed: {
-      totals: function() {
-        let total = this.cartItems;
-        this.cartItems.forEach(item => {
-           total += (item.price * item.qty);
-        });
-        return this.total;
-      }
-    },
-
+      sum: function () { return this.price * this.qty },
+       // let sum = 0;
+        // return this.cartItems.forEach(item => {
+        //   sum += (item.price * item.qty);
+        },
     methods: {
       // カートに追加(引数には何を入れるかを質問する)
       addToCart(item) {
+        sum => { return this.price * this.qty }
       this.cartItems.push({
-          title: item.title,
-          price: item.price,
-          qty: item.qty,
-          });
-      //   this.cartItems.forEach(item => {
-      //     // すでにカートに追加済みの場合は価格を加算
-      //     if (item.id === itemToAdd.id) {
-      //       existence = true;
-      //       item.qty += Number(itemToAdd.qty);
-      //     }
-      //   });
-
-      //   // 新規商品の場合は商品を追加
-      //   if (!existence) {
-      //     this.cartItems.push(Vue.util.extend({}, itemToAdd));
-      //   }
-
-      //   itemToAdd.qty = 1;
+           title: item.title,
+           price: item.price,
+           qty: item.qty,
+           });
       },
       // カートから削除
-      remove(index) {
-        this.cartItems = this.cartItems.filter(item => item.id)
+      remove(targetItemsIndex) {
+        this.cartItems.splice(targetItemsIndex, 1)
       }
 
     }
@@ -101,7 +84,7 @@
 </script>
 
 <style scoped>
- .flex-container {
+.flex-container {
     display: flex;
   }
   .cart {
