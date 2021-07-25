@@ -7,7 +7,7 @@
         <input
           type="button"
           value="価格の高い順"
-          @click="sortedByPrice(item)"        />
+          @click="sortedItemsByPrice()"        />
         <input type="text" v-model="search" placeholder="商品を検索" />
         <div class="row" v-for="item in items" :key="item.id">
           <div class="contents">
@@ -104,13 +104,6 @@ export default {
     };
   },
   computed: {
-    sortedByPrice(item) {
-      items.sort((a, b) => {
-        if (a.price < b.price) return -1;
-        if (a.price > b.price) return 1;
-        return 0;
-});
-    },
     search_items() {
       return this.items.filter(item => {
         return (
@@ -129,6 +122,13 @@ export default {
     }
   },
   methods: {
+    sortedItemsByPrice() {
+      const sortedItems = [...this.items]
+      sortedItems.sort((a, b) => {
+        if (a.price < b.price) return -1;
+        if (a.price > b.price) return 1;
+});
+    },
     // カートに追加(引数には何を入れるかを質問する)
     addToCart(item) {
       let isExist = false;
