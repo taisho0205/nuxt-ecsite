@@ -4,11 +4,21 @@
     <div class="flex-container">
       <!-- 一覧表示 -->
       <div class="flex-item">
+        <input 
+          type="button" 
+          value="価格の高い順" 
+          @click="sortItemsByPrice()" 
+        />
         <input
           type="button"
-          value="価格の高い順"
-          @click="sortedItemsByPrice()"        />
-        <input type="text" v-model="search" placeholder="商品を検索" />
+          value="価格の低い順"
+          @click="sortedItemsByPrice()"
+        />
+        <input
+          type="text"
+          v-model="value"
+          :items="items"
+        />
         <div class="row" v-for="item in items" :key="item.id">
           <div class="contents">
             <div>
@@ -62,7 +72,7 @@ export default {
   data() {
     return {
       cartItems: [], //カート追加済みの商品
-      search: "",
+      value: null,
       items: [
         {
           id: 1,
@@ -106,12 +116,11 @@ export default {
   computed: {
     search_items() {
       return this.items.filter(item => {
-        return (
-          item.title.includes(this.search) ||
+        return item.title.includes(this.search) ||
           item.price.includes(this.search) ||
-          item.id.includes(this.search)
-        );
+          item.id.includes(this.search);
       });
+    }
     },
     sum: function() {
       let sum = 0;
@@ -122,12 +131,17 @@ export default {
     }
   },
   methods: {
+    sortItemsByPrice() {
+      this.items.sort((a, b) => {
+        if (a.price < b.price) return 1;
+        if (a.price > b.price) return -1;
+      });
+    },
     sortedItemsByPrice() {
-      const sortedItems = [...this.items]
-      sortedItems.sort((a, b) => {
-        if (a.price < b.price) return -1;
+      this.items.sort((a, b) => {
         if (a.price > b.price) return 1;
-});
+        if (a.price < b.price) return -1;
+      });
     },
     // カートに追加(引数には何を入れるかを質問する)
     addToCart(item) {
@@ -146,7 +160,7 @@ export default {
       //   }
       // }
       this.cartItems.push(item);
-    },
+    }
     // カートから削除
     remove(targetItemsIndex) {
       this.cartItems.splice(targetItemsIndex, 1);
@@ -154,11 +168,13 @@ export default {
     //購入画面へ遷移
     jumpPage() {
       router.push({
-      title: this.addToCart.title, price: this.addToCart.price, qty: this.addToCart.qty 
+        title: this.addToCart.title,
+        price: this.addToCart.price,
+        qty: this.addToCart.qty
       });
     }
   }
-};
+},
 </script>
 
 <style scoped>
